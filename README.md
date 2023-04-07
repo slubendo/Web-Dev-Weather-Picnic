@@ -1,5 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-8d59dc4de5201274e310e4c54b9627a8934c3b88527886e3b421487c677d23eb.svg)](https://classroom.github.com/a/bBb_Y2J3)
 # Assignment #3 - Jicnic
+I believe that I desereve a Passing grade for this assignment. As i've accomplished all the requirements of pass including login, signup, logout, show votes and wheather api.  
 
 
 ## Notes from Student to Grader
