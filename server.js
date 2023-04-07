@@ -54,17 +54,17 @@ app.post("/login", (req, res) => {
   if (db.authenticateUser(username, password)) {
     req.session.username = username;
     isLoggedIn = true;
+    res.status(200).json({username: username, isLoggedIn: isLoggedIn})
   } else {
-    error
+    res.status(400).json({})
   }
   console.log(req.headers)
-  res.status(200).json({username: username, isLoggedIn: isLoggedIn})
 })
 
 
 app.post("/logout", (req, res) => {
   req.session = null
-  res.json({})
+  res.status(200).json({})
 })
 
 app.post("/signup", (req, res) => {
@@ -76,11 +76,11 @@ app.post("/signup", (req, res) => {
     if (db.createUser(username, password)) {
       req.session.username = username;
       isLoggedIn = true;
+      res.status(200).json({ username: username, isLoggedIn: isLoggedIn })
     }
   } else {
-    error
+    res.status(400).json({})
   }
-  res.status(200).json({ username: username, isLoggedIn: isLoggedIn })
 })
 
 app.post("/view", (req, res) => {
@@ -91,12 +91,12 @@ app.post("/view", (req, res) => {
     // console.log(viewVotes)
     dateVotes.push(viewVotes)
   }
-  res.json({ viewVotes: dateVotes })
+  res.status(200).json({ viewVotes: dateVotes })
 })
 
 
 app.get("/session", (req, res) => {
-  res.json({ session: req.session.username })
+  res.status(200).json({ session: req.session.username })
 })
 
 
