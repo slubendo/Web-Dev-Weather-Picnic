@@ -86,12 +86,11 @@ app.post("/signup", (req, res) => {
 app.post("/view", (req, res) => {
   const date = req.body.date;
   let dateVotes = [];
-  for (let i = 6; i < 6 + date; i++) {
-    viewVotes = db.getVotesForDate(`2022-04-0${i}`)
-    // console.log(viewVotes)
-    dateVotes.push(viewVotes)
+  for (let i = 5; i < 9 + date; i++) {
+    let viewVotes = db.getVotesForDate(`2022-04-0${i}`)
+      dateVotes.push(viewVotes)   
   }
-  res.status(200).json({ viewVotes: dateVotes })
+  res.status(200).json({ viewVotes: dateVotes})
 })
 
 
