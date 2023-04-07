@@ -68,7 +68,7 @@ function getVotesForDate(date) {
     for (let votedate in votes[voter]) {
       if (votedate === date && votes[voter][date]) {
         ans.push({ who: voter, vote: votes[voter][date] })
-      }
+      } 
     }
   }
   return ans;

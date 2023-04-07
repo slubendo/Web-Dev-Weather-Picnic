@@ -1,4 +1,3 @@
-
 function createCard(date) {
   let card = document.createElement('div');
   card.innerHTML = `
@@ -42,7 +41,7 @@ function updateWeather(card, temp, weather, icon) {
   card.querySelector('.weather .temp').innerText = Number(temp).toFixed(0) + " C";
   card.querySelector('.weather .weath img').title = weather;
 
-  let image_link = `https://openweathermap.org/img/wn/${icon}.png`;
+  let image_link = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/main/PNG/1st%20Set%20-%20Color/${icon}.png`;
 
   card.querySelector('.weather .weath img').src = image_link;
 }
@@ -91,11 +90,12 @@ let cards = [];
 let weekview = document.querySelector('.weekview')
 for (let i = 0; i < NUMBER_OF_DAYS_IN_PLAN; i++) {
   card = createCard(today.plus({ days: i }));
-  cards.push(card);
+  cards.push(card); 
   weekview.append(card)
 }
 
-let mySession;
+
+let mySession = null;
 
 let headerForLoggedIn = document.querySelectorAll('.forloggedin')
 let headerForLoggedOut = document.querySelectorAll('.forloggedout')
@@ -120,11 +120,23 @@ document.querySelector('form.forloggedout').addEventListener('click', event => {
   let password = document.querySelector('input#headerpassword').value
   if (event.target.classList.contains('signup')) {
 
-    //// AJAX CODE WAS DELETED HERE AND IS NOW MISSING
+    fetch(`/signup`, { method: "POST", body: JSON.stringify({ username, password }), headers: { "Content-Type": "application/json" } })
+      .then(response => response.json())
+      .then(body => {
+        if(body.isLoggedIn)
+        setMySession(body.username)
+      })
+      .catch(console.log) 
 
   } else if (event.target.classList.contains('login')) {
 
-    //// AJAX CODE WAS DELETED HERE AND IS NOW MISSING
+    fetch(`/login`, { method: "POST", body: JSON.stringify({ username, password }), headers: { "Content-Type": "application/json" } })
+      .then(response => response.json())
+      .then(body => { 
+        if(body.isLoggedIn)
+        setMySession(body.username)
+      })
+      .catch(console.log)
 
   }
 })
@@ -132,15 +144,28 @@ document.querySelector('form.forloggedout').addEventListener('click', event => {
 document.querySelector('button.logout').addEventListener('click', event => {
   event.preventDefault();
 
-  //// AJAX CODE WAS DELETED HERE AND IS NOW MISSING
-
+  fetch(`/logout`, { method: "POST", body: JSON.stringify(), headers: { "Content-Type": "application/json" } })
+    .then(response => response.json())
+    .then(body => {
+      setMySession(null)
+    })
+    .catch(console.log)
 
 })
 
 function refreshVotes() {
 
-  //// AJAX CODE WAS DELETED HERE AND IS NOW MISSING
-
+  fetch(`/view`, { method: "POST", body: JSON.stringify({date: 7}), headers: { "Content-Type": "application/json" } })
+  .then(response => response.json())
+  .then(body => {
+    cards = document.querySelectorAll(".card")
+    for(i= 0; i < cards.length; i++) {
+      let votes = body.viewVotes
+      let others = updateOthers(cards[i], votes[i])
+    }
+    
+  })
+  .catch(console.log)
 }
 
 
@@ -148,6 +173,15 @@ function placeVote(date, vote) {
 
   //// AJAX CODE WAS DELETED HERE AND IS NOW MISSING
 
+}
+
+function session() {
+  let session = fetch(`/session`, { method: "GET", body: JSON.stringify(), headers: { "Content-Type": "application/json" } })
+  .then(response => response.json())
+  .then(body => {
+    setMySession(!body.session ? null : body.session);
+  })
+  .catch(console.log)
 }
 
 document.querySelector('main').addEventListener('click', (event) => {
@@ -162,7 +196,28 @@ document.querySelector('main').addEventListener('click', (event) => {
 
 
 
+const getWeather = async () => {
 
+  const lat = BCIT_LAT
+  const long = BCIT_LON
+  const apiKey = OPEN_WEATHER_API_KEY
+
+  let weatherApi = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/vancouver?unitGroup=us&key=${apiKey}&contentType=json`)
+  let weatherBody = await weatherApi.json()
+  
+  for(i= 0; i <= 30; i++) {
+    let temp = ((weatherBody.days[i].temp) - 32) * (5/9) 
+    let weather = weatherBody.days[i].description
+    let icon = weatherBody.days[i].icon
+    console.log(weatherBody)
+    console.log(temp)
+    console.log(weather)
+    console.log(icon)
+    
+    updateWeatherByDate(`2023-04-0${i}`,temp, weather, icon )
+    updateWeatherByDate(`2023-04-${i}`,temp, weather, icon )
+  }
+}   
 //// CODE WAS ALSO DELETED HERE, OUTSIDE OF OTHER FUNCTIONS
 
 
@@ -176,6 +231,7 @@ document.querySelector('main').addEventListener('click', (event) => {
 
 
 
-
+session();
 //// ACTUALLY USEFUL
 refreshVotes();
+// getWeather();

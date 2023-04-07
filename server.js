@@ -30,8 +30,6 @@ function nextDate(prevDate, i = 1) {
 
 
 
-
-
 app.get('/', (req, res) => {
   res.render('index')
 })
@@ -49,7 +47,57 @@ api.get("/secrets", (req, res) => {
   `);
 })
 
+app.post("/login", (req, res) => {
+  const username = req.body.username
+  const password = req.body.password
+  let isLoggedIn = false
+  if (db.authenticateUser(username, password)) {
+    req.session.username = username;
+    isLoggedIn = true;
+  } else {
+    error
+  }
+  console.log(req.headers)
+  res.status(200).json({username: username, isLoggedIn: isLoggedIn})
+})
 
+
+app.post("/logout", (req, res) => {
+  req.session = null
+  res.json({})
+})
+
+app.post("/signup", (req, res) => {
+  // Req.body
+  const username = req.body.username
+  const password = req.body.password
+  let isLoggedIn = false
+  if (!db.isUsernameTaken(username)) {
+    if (db.createUser(username, password)) {
+      req.session.username = username;
+      isLoggedIn = true;
+    }
+  } else {
+    error
+  }
+  res.status(200).json({ username: username, isLoggedIn: isLoggedIn })
+})
+
+app.post("/view", (req, res) => {
+  const date = req.body.date;
+  let dateVotes = [];
+  for (let i = 6; i < 6 + date; i++) {
+    viewVotes = db.getVotesForDate(`2022-04-0${i}`)
+    // console.log(viewVotes)
+    dateVotes.push(viewVotes)
+  }
+  res.json({ viewVotes: dateVotes })
+})
+
+
+app.get("/session", (req, res) => {
+  res.json({ session: req.session.username })
+})
 
 
 app.listen(PORT, () => console.log(`server should be running at http://localhost:${PORT}/`))
