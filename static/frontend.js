@@ -234,4 +234,4 @@ const getWeather = async () => {
 session();
 //// ACTUALLY USEFUL
 refreshVotes();
-// getWeather();
+getWeather();
