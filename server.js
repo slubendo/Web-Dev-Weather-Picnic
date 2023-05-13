@@ -59,7 +59,7 @@ app.post("/login", (req, res) => {
     res.status(400).json({})
   }
   console.log(req.headers)
-})
+});
 
 
 app.post("/logout", (req, res) => {

@@ -210,9 +210,9 @@ const getWeather = async () => {
     let weather = weatherBody.days[i].description
     let icon = weatherBody.days[i].icon
     console.log(weatherBody)
-    console.log(temp)
-    console.log(weather)
-    console.log(icon)
+    // console.log(temp)
+    // console.log(weather)
+    // console.log(icon)
     
     updateWeatherByDate(`2023-04-0${i}`,temp, weather, icon )
     updateWeatherByDate(`2023-04-${i}`,temp, weather, icon )
