@@ -41,7 +41,7 @@ function updateWeather(card, temp, weather, icon) {
   card.querySelector('.weather .temp').innerText = Number(temp).toFixed(0) + " C";
   card.querySelector('.weather .weath img').title = weather;
 
-  let image_link = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/main/PNG/1st%20Set%20-%20Color/${icon}.png`;
+  let image_link = `https://github.com/visualcrossing/WeatherIcons/blob/main/PNG/1st%20Set%20-%20Color/clear-day.png`;
 
   card.querySelector('.weather .weath img').src = image_link;
 }
@@ -205,14 +205,14 @@ const getWeather = async () => {
   let weatherApi = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/vancouver?unitGroup=us&key=${apiKey}&contentType=json`)
   let weatherBody = await weatherApi.json()
   
-  for(i= 0; i <= 30; i++) {
+  for(i= 0; i <= 7; i++) {
+    // console.log(weatherBody.days[i])
     let temp = ((weatherBody.days[i].temp) - 32) * (5/9) 
     let weather = weatherBody.days[i].description
     let icon = weatherBody.days[i].icon
-    console.log(weatherBody)
-    // console.log(temp)
-    // console.log(weather)
-    // console.log(icon)
+    console.log(temp)
+    console.log(weather)
+    console.log(icon)
     
     updateWeatherByDate(`2023-04-0${i}`,temp, weather, icon )
     updateWeatherByDate(`2023-04-${i}`,temp, weather, icon )
